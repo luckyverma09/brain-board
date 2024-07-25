@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { ChevronLeft, MenuIcon, PlusCircle, Search, Settings, Plus, Trash } from 'lucide-react';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 import { UserItem } from './user-item';
@@ -17,6 +17,7 @@ import { TrashBox } from './trash-box';
 import { Navbar } from './navbar';
 
 export const Navigation = () => {
+  const router = useRouter();
   const search = useSearch();
   const settings = useSettings();
   const params = useParams();
@@ -102,7 +103,9 @@ export const Navigation = () => {
   };
 
   const handleCreate = () => {
-    const promise = create({ title: 'Untitled' });
+    const promise = create({ title: 'Untitled' }).then((documentId) =>
+      router.push(`/documents/${documentId}`)
+    );
 
     toast.promise(promise, {
       loading: 'Creating...',
